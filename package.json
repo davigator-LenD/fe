@@ -1,28 +1,57 @@
 {
-  "name": "fe",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "14.0.4",
-    "next-pwa": "^5.6.0",
-    "react": "^18",
-    "react-dom": "^18"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
-  }
+    "name": "lend_fe",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Davigator frontend root repository",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint 'src/**/*.{ts,tsx}'",
+        "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
+        "prettier": "prettier --check .",
+        "prettier:fix": "prettier --write .",
+        "svg": "npx @svgr/cli src/lib/icons --out-dir src/lib/icons --typescript",
+        "clean": "pnpm -r --parallel exec rimraf node_modules && rimraf node_modules",
+        "test": "vitest",
+        "test:watch": "vitest --watch -u",
+        "test:ci": "vitest run",
+        "pre-commit": "lint-staged",
+        "prepare": "husky install"
+    },
+    "dependencies": {
+        "next": "14.0.4",
+        "next-pwa": "^5.6.0",
+        "react": "^18",
+        "react-dom": "^18"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "@typescript-eslint/eslint-plugin": "^6.19.0",
+        "@typescript-eslint/parser": "^6.19.0",
+        "autoprefixer": "^10.0.1",
+        "eslint": "^8",
+        "eslint-config-next": "14.0.4",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-tailwindcss": "^3.14.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.2.0",
+        "postcss": "^8",
+        "prettier": "^3.2.2",
+        "prettier-plugin-tailwindcss": "^0.5.11",
+        "rimraf": "^5.0.5",
+        "tailwind-scrollbar-hide": "^1.1.7",
+        "tailwindcss": "^3.3.0",
+        "tailwindcss-3d": "^1.0.4",
+        "typescript": "^5",
+        "vite-tsconfig-paths": "^4.2.3",
+        "vitest": "^1.2.0"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    }
 }

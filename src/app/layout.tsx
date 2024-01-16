@@ -19,6 +19,7 @@ export const metadata: Metadata = {
             },
         ],
     },
+    manifest: '/manifest.webmanifest', // enable PWA
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

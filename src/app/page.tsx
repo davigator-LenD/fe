@@ -1,11 +1,8 @@
-import Back from '@/lib/icons/Back'
-import SvgNote from '@/lib/icons/Note'
-import SvgSend from '@/lib/icons/Send'
-import WebList from '@/lib/icons/WebList'
+import SvgVoice from '@/lib/icons/Voice'
 export default function Home() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <SvgNote />
+            <SvgVoice />
         </main>
     )
 }

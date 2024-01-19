@@ -1,3 +1,3 @@
-import { tw } from './tailwind'
+import { tw } from './tw'
 
 export const util = {} as const

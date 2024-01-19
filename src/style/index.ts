@@ -1,2 +1,2 @@
-export * from './tailwind'
+export * from './tw'
 export * from './util'

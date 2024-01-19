@@ -42,7 +42,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="kr" className={`${bylander.variable} ${pretendard.variable}`}>
-            <body className="h-screen max-h-screen min-h-screen bg-background font-kor text-font">{children}</body>
+            <body className="h-screen max-h-screen min-h-screen bg-background font-kor text-theme-font">
+                {children}
+            </body>
         </html>
     )
 }

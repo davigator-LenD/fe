@@ -22,7 +22,10 @@ const config: Config = {
             },
             colors: {
                 background: '#121212',
-                font: '#FFFFFF',
+                theme: {
+                    background: '#121212',
+                    font: '#FFFFFF',
+                },
                 primary: {
                     logo: '#EBFE83',
                     icon: '#959595',

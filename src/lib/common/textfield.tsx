@@ -1,7 +1,7 @@
 'use client'
 import React, { FormEvent, useState } from 'react'
 import { useEffect } from 'react'
-import SvgSend from '../icons/send'
+import SvgSend from '../icons/Send'
 
 export const TextField = () => {
     const [website, setWebsite] = useState('')
@@ -17,15 +17,15 @@ export const TextField = () => {
             window.removeEventListener('resize', handleResize)
         }
     }, [])
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = () => {
+        //e.preventDefault()
         alert(`website: ${website}`)
     }
 
     return (
         <div className="flex h-screen w-full items-center justify-center p-8">
             <div className={`fixed bottom-4 flex w-full  items-center p-[10px]`} style={{ height: inputHeight }}>
-                <form className=" flex w-full " onSubmit={handleSubmit}>
+                <form className=" flex w-full ">
                     <input
                         className={`flex max-h-[80px] w-full items-center rounded-3xl border-2 border-primary-box bg-transparent p-3 px-6 caret-primary-logo shadow-inner ${website === '' ? 'placeholder:text-primary-box' : ' placeholder:text-theme-font'}`}
                         id="textfield1"
@@ -36,12 +36,13 @@ export const TextField = () => {
                     />
                 </form>
 
-                {/* {website === '' ? <div></div> 
-               :
-               <div className="z-10 ml-[-40px] flex items-center justify-end"
-               >
-               <SvgSend />
-               </div> } */}
+                {website === '' ? (
+                    <div></div>
+                ) : (
+                    <div className="z-10 ml-[-40px] flex items-center justify-end" onClick={handleSubmit}>
+                        <SvgSend />
+                    </div>
+                )}
             </div>
         </div>
     )

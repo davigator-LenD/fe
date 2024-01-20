@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SVGProps } from 'react'
-const SvgWebList = (props: SVGProps<SVGSVGElement>) => (
+export const SvgWebList = (props: SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="29" fill="none" {...props}>
         <path
             fill="#fff"
@@ -26,4 +26,3 @@ const SvgWebList = (props: SVGProps<SVGSVGElement>) => (
         />
     </svg>
 )
-export default SvgWebList

@@ -1,8 +1,7 @@
 'use client'
-import React, { FormEvent, useState } from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
-import SvgSend from '../icons/Send'
-import { Divider } from '.'
+import { SvgSmallSend } from '../icons/ send_small'
 
 export const WebTextField = () => {
     const [website, setWebsite] = useState('')
@@ -19,8 +18,7 @@ export const WebTextField = () => {
         }
     }, [])
     const handleSubmit = () => {
-        //e.preventDefault()
-        console.log(`website: ${website}`)
+        //console.log(`website: ${website}`)
         setWebsite('')
     }
 
@@ -41,8 +39,8 @@ export const WebTextField = () => {
                 {website === '' ? (
                     <div></div>
                 ) : (
-                    <div className="z-10 ml-[-40px] flex items-center justify-end" onClick={handleSubmit}>
-                        <SvgSend />
+                    <div className="z-10 ml-[-48px] flex items-center justify-end" onClick={handleSubmit}>
+                        <SvgSmallSend />
                     </div>
                 )}
             </div>
@@ -65,8 +63,7 @@ export const QuestionTextField = () => {
         }
     }, [])
     const handleSubmit = () => {
-        //e.preventDefault()
-        alert(`website: ${website}`)
+        //alert(`website: ${website}`)
         setWebsite('')
     }
 
@@ -76,11 +73,9 @@ export const QuestionTextField = () => {
                 className={`fixed bottom-0 flex w-full flex-col items-center justify-evenly bg-primary-textfieldBOX  p-[10px]`}
                 style={{ height: `${inputHeight + 60}px` }}
             >
-                <div
-                    className={`${website === '' ? 'mb-[4px]' : 'mt-[12px]'}  h-[3px] w-1/5 rounded-3xl bg-background`}
-                ></div>
+                <div className={`${website === '' ? 'mb-[4px]' : ''}  h-[3px] w-1/5 rounded-3xl bg-background`}></div>
                 <div className="flex w-full items-center justify-center">
-                    <form className={`${website === '' ? 'mb-[-12px]' : 'mb-[-16px]'} flex w-full `}>
+                    <form className={`${website === '' ? 'mb-[-12px]' : 'mb-[-12px]'} flex w-full `}>
                         <input
                             className={`flex max-h-[80px] w-full items-center rounded-3xl border-2 border-primary-box bg-background p-3 px-6 caret-primary-logo shadow-inner ${website === '' ? 'placeholder:text-primary-box' : ' placeholder:text-theme-font'}`}
                             id="textfield1"
@@ -95,10 +90,10 @@ export const QuestionTextField = () => {
                         <div></div>
                     ) : (
                         <div
-                            className={`${website === '' ? '' : 'mb-[-16px]'} z-10 ml-[-40px] flex items-center justify-end`}
+                            className={`${website === '' ? '' : 'mb-[-12px]'} z-10 ml-[-48px] flex items-center justify-end`}
                             onClick={handleSubmit}
                         >
-                            <SvgSend />
+                            <SvgSmallSend />
                         </div>
                     )}
                 </div>

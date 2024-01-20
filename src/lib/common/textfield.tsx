@@ -1,14 +1,11 @@
 'use client'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SvgSmallSend } from '../icons/ send_small'
-
-export const WebTextField = () => {
-    const [website, setWebsite] = useState('')
-    const [inputHeight, setInputHeight] = useState(60)
+const useKeyboardHeight = () => {
+    const [keyboardHeight, setKeyboardHeight] = useState(60)
     useEffect(() => {
         const handleResize = () => {
-            setInputHeight(window.innerHeight * 0.1) // 예시: 뷰포트 높이의 10%
+            setKeyboardHeight(window.innerHeight * 0.1) // 예시: 뷰포트 높이의 10%
         }
 
         window.addEventListener('resize', handleResize)
@@ -17,6 +14,11 @@ export const WebTextField = () => {
             window.removeEventListener('resize', handleResize)
         }
     }, [])
+    return keyboardHeight
+}
+export const WebTextField = () => {
+    const [website, setWebsite] = useState('')
+    const inputHeight = useKeyboardHeight()
     const handleSubmit = () => {
         //console.log(`website: ${website}`)
         setWebsite('')
@@ -50,18 +52,8 @@ export const WebTextField = () => {
 
 export const QuestionTextField = () => {
     const [website, setWebsite] = useState('')
-    const [inputHeight, setInputHeight] = useState(60)
-    useEffect(() => {
-        const handleResize = () => {
-            setInputHeight(window.innerHeight * 0.1) // 예시: 뷰포트 높이의 10%
-        }
+    const inputHeight = useKeyboardHeight()
 
-        window.addEventListener('resize', handleResize)
-
-        return () => {
-            window.removeEventListener('resize', handleResize)
-        }
-    }, [])
     const handleSubmit = () => {
         //alert(`website: ${website}`)
         setWebsite('')

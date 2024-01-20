@@ -31,6 +31,7 @@ const config: Config = {
                     icon: '#959595',
                     box: '#262626',
                     toggleBG: '#171413',
+                    textfieldBOX: '#E8E8E7',
                 },
             },
         },

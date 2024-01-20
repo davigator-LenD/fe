@@ -1,9 +1,11 @@
-import { WebTextField } from '@/lib/common/textfield'
-import { QuestionTextField } from '@/lib/common/textfield'
+import { Text } from '@/lib/common/heading'
 export default function Home() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-8">
-            <QuestionTextField />
+            <Text>
+                <Text.Heading>Assistance</Text.Heading>
+                <Text.SubHeading>접속하고자 하는 사이트</Text.SubHeading>
+            </Text>
         </main>
     )
 }

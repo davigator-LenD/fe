@@ -1,3 +1,4 @@
+import { Toggle } from '@/lib/common'
 import { Text } from '@/lib/common/heading'
 export default function Home() {
     return (
@@ -6,6 +7,7 @@ export default function Home() {
                 <Text.Heading>Assistance</Text.Heading>
                 <Text.SubHeading>접속하고자 하는 사이트</Text.SubHeading>
             </Text> */}
+            <Toggle />
         </main>
     )
 }

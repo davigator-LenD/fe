@@ -5,23 +5,23 @@ const SvgWebList = (props: SVGProps<SVGSVGElement>) => (
         <path
             fill="#fff"
             stroke="#fff"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M15 1 1 6.99l14 5.98 14-5.98L15 1Z"
         />
         <path
             stroke="#fff"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M5.53 12.15 1 14.09l14 5.98 14-5.98-4.53-1.94"
         />
         <path
             stroke="#fff"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M5.53 19.17 1 21.1l14 5.99 14-5.99-4.53-1.93"
         />
     </svg>

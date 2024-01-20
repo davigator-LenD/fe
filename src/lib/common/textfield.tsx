@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { SvgSmallSend } from '../icons/ send_small'
+import { SvgSmallSend } from '@/lib/icons'
 const useKeyboardHeight = () => {
     const [keyboardHeight, setKeyboardHeight] = useState(60)
     useEffect(() => {

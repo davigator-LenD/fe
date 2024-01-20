@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { SVGProps } from 'react'
-const SvgKeyboard = (props: SVGProps<SVGSVGElement>) => (
+export const SvgKeyboard = (props: SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" fill="none" {...props}>
         <g filter="url(#a)">
-            <rect width="85" height="85" fill="#959595" fill-opacity=".2" rx="42.5" />
+            <rect width="85" height="85" fill="#959595" fillOpacity=".2" rx="42.5" />
         </g>
-        <path stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M47.43 45.84H36.58" />
+        <path stroke="#fff" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="M47.43 45.84H36.58" />
         <path
             stroke="#fff"
-            stroke-miterlimit="10"
-            stroke-width="2"
+            strokeMiterlimit="10"
+            strokeWidth="2"
             d="M53.7 33H30.3a2.3 2.3 0 0 0-2.3 2.3v13.96a2.3 2.3 0 0 0 2.3 2.3h23.4a2.3 2.3 0 0 0 2.3-2.3V35.3a2.3 2.3 0 0 0-2.3-2.3Z"
         />
         <path
@@ -23,10 +23,10 @@ const SvgKeyboard = (props: SVGProps<SVGSVGElement>) => (
                 height="365"
                 x="-140"
                 y="-140"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
                 filterUnits="userSpaceOnUse"
             >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImageFix" stdDeviation="70" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_97_119" />
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur_97_119" result="shape" />
@@ -34,4 +34,3 @@ const SvgKeyboard = (props: SVGProps<SVGSVGElement>) => (
         </defs>
     </svg>
 )
-export default SvgKeyboard

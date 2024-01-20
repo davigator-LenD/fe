@@ -19,7 +19,8 @@ export const WebTextField = () => {
     }, [])
     const handleSubmit = () => {
         //e.preventDefault()
-        alert(`website: ${website}`)
+        console.log(`website: ${website}`)
+        setWebsite('')
     }
 
     return (
@@ -64,7 +65,8 @@ export const QuestionTextField = () => {
     }, [])
     const handleSubmit = () => {
         //e.preventDefault()
-        alert(`website: ${website}`)
+        console.log(`website: ${website}`)
+        setWebsite('')
     }
 
     return (

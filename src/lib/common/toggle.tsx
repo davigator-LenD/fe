@@ -1,12 +1,13 @@
+import { SvgArrowLeft } from '../icons/arrow'
+import { SvgArrowRight } from '../icons/arrow'
 import SvgKeyboard from '../icons/keyboard'
 import SvgVoice from '../icons/voice'
 export const Toggle = () => {
     return (
-        <div className="flex h-[100px] w-[400px] items-center justify-center bg-white">
-            <div className="flex w-[200px] flex-row items-center justify-between rounded-full bg-primary-toggleBG ">
-                <SvgVoice />
-                <SvgKeyboard />
-            </div>
+        <div className="flex w-[210px] flex-row items-center justify-between rounded-full bg-primary-toggleBG ">
+            <SvgVoice />
+            <SvgArrowRight />
+            <SvgKeyboard />
         </div>
     )
 }

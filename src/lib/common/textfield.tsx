@@ -2,6 +2,7 @@
 import React, { FormEvent, useState } from 'react'
 import { useEffect } from 'react'
 import SvgSend from '../icons/Send'
+import { Divider } from '.'
 
 export const WebTextField = () => {
     const [website, setWebsite] = useState('')
@@ -65,31 +66,42 @@ export const QuestionTextField = () => {
     }, [])
     const handleSubmit = () => {
         //e.preventDefault()
-        console.log(`website: ${website}`)
+        alert(`website: ${website}`)
         setWebsite('')
     }
 
     return (
         <div className="flex h-screen w-full items-center justify-center p-8">
-            <div className={`fixed bottom-4 flex w-full  items-center p-[10px]`} style={{ height: inputHeight }}>
-                <form className=" flex w-full ">
-                    <input
-                        className={`flex max-h-[80px] w-full items-center rounded-3xl border-2 border-primary-box bg-transparent p-3 px-6 caret-primary-logo shadow-inner ${website === '' ? 'placeholder:text-primary-box' : ' placeholder:text-theme-font'}`}
-                        id="textfield1"
-                        type="text"
-                        value={website}
-                        onChange={(e) => setWebsite(e.target.value)}
-                        placeholder="웹 사이트 이름"
-                    />
-                </form>
+            <div
+                className={`fixed bottom-0 flex w-full flex-col items-center justify-evenly bg-primary-textfieldBOX  p-[10px]`}
+                style={{ height: `${inputHeight + 60}px` }}
+            >
+                <div
+                    className={`${website === '' ? 'mb-[4px]' : 'mt-[12px]'}  h-[3px] w-1/5 rounded-3xl bg-background`}
+                ></div>
+                <div className="flex w-full items-center justify-center">
+                    <form className={`${website === '' ? 'mb-[-12px]' : 'mb-[-16px]'} flex w-full `}>
+                        <input
+                            className={`flex max-h-[80px] w-full items-center rounded-3xl border-2 border-primary-box bg-background p-3 px-6 caret-primary-logo shadow-inner ${website === '' ? 'placeholder:text-primary-box' : ' placeholder:text-theme-font'}`}
+                            id="textfield1"
+                            type="text"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                            placeholder="웹 사이트 이름"
+                        />
+                    </form>
 
-                {website === '' ? (
-                    <div></div>
-                ) : (
-                    <div className="z-10 ml-[-40px] flex items-center justify-end" onClick={handleSubmit}>
-                        <SvgSend />
-                    </div>
-                )}
+                    {website === '' ? (
+                        <div></div>
+                    ) : (
+                        <div
+                            className={`${website === '' ? '' : 'mb-[-16px]'} z-10 ml-[-40px] flex items-center justify-end`}
+                            onClick={handleSubmit}
+                        >
+                            <SvgSend />
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 import { SVGProps } from 'react'
-const SvgSend = (props: SVGProps<SVGSVGElement>) => (
+const SvgBasicSend = (props: SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" {...props}>
         <circle cx="20" cy="20" r="20" fill="#EBFE83" transform="matrix(-1 0 0 1 40 0)" />
         <path
@@ -11,4 +11,4 @@ const SvgSend = (props: SVGProps<SVGSVGElement>) => (
         />
     </svg>
 )
-export default SvgSend
+export default SvgBasicSend

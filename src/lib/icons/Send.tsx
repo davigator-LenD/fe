@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { SVGProps } from 'react'
 const SvgSend = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" fill="none" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" {...props}>
         <circle cx="42.5" cy="42.5" r="42.5" fill="#EBFE83" transform="matrix(-1 0 0 1 85 0)" />
         <path
             stroke="#262626"

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { Viewport } from 'next'
 import localFont from 'next/font/local'
 import '../style/globals.css'
+import Provider from './_components/provider'
 
 const pretendard = localFont({
     src: [
@@ -43,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="kr" className={`${bylander.variable} ${pretendard.variable}`}>
             <body className="h-screen max-h-screen min-h-screen bg-background font-kor text-theme-font">
-                {children}
+                <Provider>{children}</Provider>
             </body>
         </html>
     )

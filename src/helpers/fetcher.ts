@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 
+import { Logger } from './logger'
+
 type FetchErrorStatus = 400 | 401 | 403 | 404 | 500 | 502 | 503 | 504
 export class FetchError extends Error {
     constructor(
@@ -36,7 +38,9 @@ export class FetchError extends Error {
 type DefaultFetchOption = {
     disableJsonParse?: boolean
 }
-type NextApiPath = 'tts'
+// eslint-disable-next-line @typescript-eslint/ban-types
+type NextApiPath = 'tts' | 'stt' | (string & {})
+
 type FetchOption<OmitTarget extends keyof RequestInit | null = null> = OmitTarget extends null
     ? RequestInit & DefaultFetchOption
     : OmitTarget extends string
@@ -61,6 +65,9 @@ export class Fetcher {
     private readonly baseUrl: string
     public static fetchPrefix = 'api' as const
     private readonly option: FetcherOption
+    private readonly $lg = new Logger({
+        name: 'Fetcher',
+    })
 
     public constructor(option: FetcherOption | undefined = defaultFetcherOption) {
         this.option = option
@@ -81,8 +88,14 @@ export class Fetcher {
         return `${this.baseUrl}/${Fetcher.fetchPrefix}/${apiPath}`
     }
 
+    private toJsonString(json: unknown): string {
+        return JSON.stringify(json, null, 2)
+    }
+
     public async get<APISchema = Response>(apiPath: NextApiPath, option?: FetchOption<'method'>): Promise<APISchema> {
         try {
+            this.$lg.info(`GET: ${apiPath}`)
+
             const response = await fetch(this.apiRequestPath(apiPath), {
                 ...option,
                 method: 'GET',
@@ -97,7 +110,11 @@ export class Fetcher {
             const json = (await response.json()) as APISchema
             return json
         } catch (e: unknown) {
-            console.error(e)
+            if (e instanceof Error) {
+                this.$lg.error(e.message)
+            } else {
+                this.$lg.error(this.toJsonString(e))
+            }
             throw new Error(typeof e === 'string' ? e : e instanceof Error ? e.message : JSON.stringify(e))
         }
     }
@@ -110,10 +127,13 @@ export class Fetcher {
         }
     ): Promise<APISchema> {
         try {
+            this.$lg.info(`POST: ${apiPath}`)
+            const body = this.toJsonString(postBody.body)
+
             const response = await fetch(this.apiRequestPath(apiPath), {
                 ...postBody.option,
                 method: 'POST',
-                body: JSON.stringify(postBody.body),
+                body,
                 headers: {
                     'content-type': 'application/json',
                     ...postBody.option?.headers,
@@ -126,7 +146,11 @@ export class Fetcher {
             const json = (await response.json()) as APISchema
             return json
         } catch (e: unknown) {
-            console.error(e)
+            if (e instanceof Error) {
+                this.$lg.error(e.message)
+            } else {
+                this.$lg.error(this.toJsonString(e))
+            }
             throw new Error(typeof e === 'string' ? e : e instanceof Error ? e.message : JSON.stringify(e))
         }
     }

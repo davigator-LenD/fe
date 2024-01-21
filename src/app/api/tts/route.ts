@@ -4,8 +4,6 @@ import { openAi } from '@/service/open_ai'
 
 const assistant = Assistant.create(openAi)
 
-export const runtime = 'edge'
-
 export async function POST(req: Request) {
     const { text } = tts.body.parse(await req.json())
 

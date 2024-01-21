@@ -46,10 +46,10 @@ export type AudioUrl = string
 export const useTTS = () => {
     const [audioUrlList, setAudioUrlList] = useState<Map<string, AudioUrl>>(new Map())
 
-    const fetchTTSAudio = async (text: string): Promise<void> => {
+    const fetchTTSAudio = async (text: string): Promise<Blob | null> => {
         if (audioUrlList.has(text)) {
             playAudio(audioUrlList.get(text)!)
-            return
+            return null
         }
 
         const ttsResponse = await fetcher.post('tts', {
@@ -71,6 +71,8 @@ export const useTTS = () => {
         })
 
         playAudio(audioUrl)
+
+        return blob
     }
 
     return {
@@ -78,7 +80,7 @@ export const useTTS = () => {
          * @description fetch tts audio from text
          * @param text
          */
-        get: fetchTTSAudio,
+        getTTS: fetchTTSAudio,
         /**
          * @description store of audio cache url
          */

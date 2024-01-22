@@ -1,6 +1,6 @@
 'use client'
-import React, { PropsWithChildren, useEffect, useState } from 'react'
-import { AudioVisualizerExample } from '@/app/_components/ex_audio'
+import { useEffect, useState } from 'react'
+import { AssistantModule } from '@/app/_components/assistant_module'
 import { SvgSmallSend } from '@/lib/icons'
 import { SvgClose } from '../icons/close'
 const useKeyboardHeight = () => {
@@ -112,7 +112,7 @@ export const QuestionTextField = () => {
                     </div>
                 </div>
             ) : (
-                <AudioVisualizerExample />
+                <AssistantModule />
             )}
         </div>
     )

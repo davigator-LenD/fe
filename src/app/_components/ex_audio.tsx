@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { AudioVisualizer, useAudioVisualizer, useMediaRecorder } from '@/lib/common/audio_visualizer'
 import { useSTT } from '@/lib/hooks/use_stt'
+import { SvgArrowRight, SvgKeyboard, SvgVoice } from '@/lib/icons'
 
 export const AudioVisualizerExample = () => {
     const { getSTT } = useSTT()
 
     const [stt, setStt] = useState('')
+    const [isRecordClicked, setIsRecordClicked] = useState<boolean>(false)
 
     const { isRecording, isMediaStreamReady, mediaStream, startRecord, stopRecord } = useMediaRecorder({
         constraints: { audio: true },
@@ -38,25 +40,27 @@ export const AudioVisualizerExample = () => {
         <>
             <h1 className="text-2xl font-bold">Record: {isRecording ? 'yes' : 'no'}</h1>
             <h2 className="font-kor text-xl font-semibold">{stt}</h2>
-            <div className="flex flex-row items-center justify-center gap-3">
+            <div className="flex w-[210px] flex-row items-center justify-between rounded-full bg-primary-toggleBG ">
                 <button
-                    className={btn}
                     onClick={() => {
-                        connect()
-                        startRecord()
+                        setIsRecordClicked(!isRecordClicked)
+                        if (isRecordClicked) {
+                            // isRecordClicked가 true일 때
+                            connect()
+                            startRecord()
+                        } else {
+                            // isRecordClicked가 false일 때
+                            stopRecord()
+                        }
                     }}
                 >
-                    start record
+                    <SvgVoice />
                 </button>
-                <button
-                    className={btn}
-                    onClick={() => {
-                        stopRecord()
-                    }}
-                >
-                    stop record
+                <SvgArrowRight />
+                <button onClick={() => {}}>
+                    <SvgKeyboard />
                 </button>
-                <button
+                {/* <button
                     className={btn}
                     onClick={() => {
                         stopRecord()
@@ -64,7 +68,7 @@ export const AudioVisualizerExample = () => {
                     }}
                 >
                     Disconnect
-                </button>
+                </button> */}
             </div>
 
             <div className="flex flex-row items-center justify-center rounded-[2rem] bg-[#121212] p-10">

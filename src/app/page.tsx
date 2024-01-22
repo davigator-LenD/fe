@@ -1,12 +1,9 @@
-import { useState } from 'react'
-import { QuestionTextField } from '@/lib/common'
-import { AudioVisualizerExample } from './_components/ex_audio'
+import { AssistantModule } from './_components/assistant_module'
 
 export default function Home() {
     return (
         <main>
-            <AudioVisualizerExample />
-            {/* <QuestionTextField />  */}
+            <AssistantModule />
         </main>
     )
 }

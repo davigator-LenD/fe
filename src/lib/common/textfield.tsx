@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { SvgSmallSend } from '@/lib/icons'
+import { SvgClose } from '../icons/close'
 const useKeyboardHeight = () => {
     const [keyboardHeight, setKeyboardHeight] = useState(60)
     useEffect(() => {
@@ -65,7 +66,15 @@ export const QuestionTextField = () => {
                 className={`fixed bottom-0 flex w-full flex-col items-center justify-evenly bg-primary-textfieldBOX  p-[10px]`}
                 style={{ height: `${inputHeight + 60}px` }}
             >
-                <div className={`${website === '' ? 'mb-[4px]' : ''}  h-[3px] w-1/5 rounded-3xl bg-background`}></div>
+                <div className="flex w-full flex-row items-center justify-between">
+                    <div></div>
+                    <div
+                        className={` ${website === '' ? 'mb-[4px]' : ''}  h-[3px] w-1/5 rounded-3xl bg-background`}
+                    ></div>
+                    <div className="mt-[-16px]">
+                        <SvgClose />
+                    </div>
+                </div>
                 <div className="flex w-full items-center justify-center">
                     <form className={`${website === '' ? 'mb-[-12px]' : 'mb-[-12px]'} flex w-full `}>
                         <input

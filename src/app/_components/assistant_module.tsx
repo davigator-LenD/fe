@@ -1,14 +1,12 @@
 'use client'
 
-import { PropsWithChildren, useState } from 'react'
+import { useState } from 'react'
 import { QuestionTextField } from '@/lib/common'
 import { AudioVisualizer, useAudioVisualizer, useMediaRecorder } from '@/lib/common/audio_visualizer'
 import { useSTT } from '@/lib/hooks/use_stt'
 import { SvgArrowRight, SvgKeyboard, SvgVoice } from '@/lib/icons'
-interface ModeProps {
-    mode: boolean
-}
-export const AudioVisualizerExample = () => {
+
+export const AssistantModule = () => {
     const { getSTT } = useSTT()
 
     const [stt, setStt] = useState('')
@@ -27,7 +25,7 @@ export const AudioVisualizerExample = () => {
         },
     })
 
-    const { connect, disconnect, getAmplitude } = useAudioVisualizer({
+    const { connect, getAmplitude } = useAudioVisualizer({
         isMediaStreamReady,
         mediaStream,
         analyzerOptions: {

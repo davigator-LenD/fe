@@ -1,6 +1,6 @@
-export interface API_RESPONSE<Data> {
+export interface ApiResponse<Response> {
     ok: boolean
     status: number
     message: string
-    data: Data
+    response: Response
 }

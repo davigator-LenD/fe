@@ -71,7 +71,6 @@ const createAudioAnalyzer = ({
 
     const connect = () => {
         source.connect(analyzer)
-        source.connect(audioContext.destination)
     }
 
     const disconnect = () => {
@@ -156,12 +155,12 @@ const useMediaStream = ({ constraints }: UseMediaStreamProps) => {
 
 interface UseMediaRecorderProps extends UseMediaStreamProps {
     /**
-     * @description handle media chunks when ready
-     * @param mediaChunks recorded media chunks, `Array<Blob>`
+     * @description handle recorded audio blob when ready
+     * @param audioBlob recorded audioBlob, `Blob`
      */
-    whenMediaChunksReady: (mediaChunks: Array<Blob>) => void
+    whenAudioBlobReady: (audioBlob: Blob) => void
 }
-export const useMediaRecorder = ({ constraints, whenMediaChunksReady }: UseMediaRecorderProps) => {
+export const useMediaRecorder = ({ constraints, whenAudioBlobReady: whenMediaChunksReady }: UseMediaRecorderProps) => {
     const { isMediaStreamReady, mediaStream } = useMediaStream({ constraints })
 
     const mediaRecorder = useRef<MediaRecorder | null>(null)
@@ -171,12 +170,13 @@ export const useMediaRecorder = ({ constraints, whenMediaChunksReady }: UseMedia
 
     useEffect(() => {
         if (isMediaStreamReady && mediaStream) {
-            const recorder = new MediaRecorder(mediaStream)
+            const recorder: MediaRecorder = new MediaRecorder(mediaStream)
             mediaRecorder.current = recorder
             mediaRecorder.current.ondataavailable = (event) => {
                 if (event.data.size > 0) {
                     mediaChunks.current.push(event.data)
-                    whenMediaChunksReady(mediaChunks.current)
+                    const combinedChunks = new Blob(mediaChunks.current, { type: 'audio/webm' })
+                    whenMediaChunksReady(combinedChunks)
                 }
             }
             lg.success('media recorder created')
@@ -285,7 +285,7 @@ export const useAudioVisualizer = ({
     analyzerOptions,
     autoBoot = true,
 }: UseAudioVisualizerProps) => {
-    const audioEngine = useRef<AudioAnalyzer | null>(null)
+    const audioAnalyzer = useRef<AudioAnalyzer | null>(null)
     const [isAudioEngineReady, setIsAudioEngineReady] = useState<boolean>(false)
 
     useEffect(() => {
@@ -297,20 +297,20 @@ export const useAudioVisualizer = ({
             ...analyzerOptions,
             mediaStream,
         })
-        audioEngine.current = engine
+        audioAnalyzer.current = engine
         setIsAudioEngineReady(true)
         lg.success('audio engine created')
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMediaStreamReady])
 
     const connect = useCallback(() => {
-        if (!audioEngine.current) return
-        audioEngine.current.connect()
+        if (!audioAnalyzer.current) return
+        audioAnalyzer.current.connect()
     }, [])
 
     const disconnect = useCallback(() => {
-        if (!audioEngine.current) return
-        audioEngine.current.disconnect()
+        if (!audioAnalyzer.current) return
+        audioAnalyzer.current.disconnect()
     }, [])
 
     useEffect(() => {
@@ -325,9 +325,9 @@ export const useAudioVisualizer = ({
     }, [isAudioEngineReady, autoBoot])
 
     const getAmplitude = useCallback((activeBarNumber: number) => {
-        if (!audioEngine.current) return []
-        audioEngine.current.analyzer.getByteFrequencyData(audioEngine.current.frequencyStep)
-        const amplitude: Array<number> = mergeFrequencyStep(audioEngine.current.frequencyStep, activeBarNumber)
+        if (!audioAnalyzer.current) return []
+        audioAnalyzer.current.analyzer.getByteFrequencyData(audioAnalyzer.current.frequencyStep)
+        const amplitude: Array<number> = mergeFrequencyStep(audioAnalyzer.current.frequencyStep, activeBarNumber)
         return amplitude
     }, [])
 

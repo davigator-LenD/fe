@@ -1,13 +1,23 @@
 'use client'
 
+import { useState } from 'react'
 import { AudioVisualizer, useAudioVisualizer, useMediaRecorder } from '@/lib/common/audio_visualizer'
+import { useSTT } from '@/lib/hooks/use_stt'
 
 export const AudioVisualizerExample = () => {
+    const { getSTT } = useSTT()
+
+    const [stt, setStt] = useState('')
+
     const { isRecording, isMediaStreamReady, mediaStream, startRecord, stopRecord } = useMediaRecorder({
         constraints: { audio: true },
-        whenMediaChunksReady: async (chunks) => {
-            console.log(chunks)
-            // handle chunks
+        whenAudioBlobReady: async (chunks) => {
+            await getSTT({
+                whenDataReady: (text) => {
+                    setStt(text)
+                },
+                audioBlob: chunks,
+            })
         },
     })
 
@@ -27,6 +37,7 @@ export const AudioVisualizerExample = () => {
     return (
         <>
             <h1 className="text-2xl font-bold">Record: {isRecording ? 'yes' : 'no'}</h1>
+            <h2 className="font-kor text-xl font-semibold">{stt}</h2>
             <div className="flex flex-row items-center justify-center gap-3">
                 <button
                     className={btn}

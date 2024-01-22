@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SVGProps } from 'react'
-const SvgNote = (props: SVGProps<SVGSVGElement>) => (
+export const SvgNote = (props: SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="27" height="22" fill="none" {...props}>
         <path
             fill="#EBFE83"
@@ -16,4 +16,3 @@ const SvgNote = (props: SVGProps<SVGSVGElement>) => (
         />
     </svg>
 )
-export default SvgNote

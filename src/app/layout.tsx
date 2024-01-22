@@ -1,7 +1,8 @@
-import type { Metadata } from 'next'
-import type { Viewport } from 'next'
+import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import '../style/globals.css'
+import { getServerSession } from 'next-auth/next'
+import { SessionProviderContainer } from './_components/provider'
 
 const pretendard = localFont({
     src: [
@@ -39,11 +40,12 @@ export const metadata: Metadata = {
     manifest: '/manifest.webmanifest', // enable PWA
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const session = await getServerSession()
     return (
         <html lang="kr" className={`${bylander.variable} ${pretendard.variable}`}>
-            <body className="h-screen max-h-screen min-h-screen  bg-background font-kor text-theme-font">
-                <main className="mx-auto size-full px-6">{children}</main>
+            <body className="h-screen max-h-screen min-h-screen bg-background font-kor text-theme-font">
+                <SessionProviderContainer session={session}>{children}</SessionProviderContainer>
             </body>
         </html>
     )

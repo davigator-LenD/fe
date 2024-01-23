@@ -29,6 +29,13 @@ const nextConfig = {
         })
         return config
     },
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            frameSrc: ['https://localhost:3000'],
+            // ...
+        },
+    },
 }
 
 module.exports = withPWA(nextConfig)

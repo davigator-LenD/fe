@@ -2,6 +2,7 @@ export default function WebViewPage() {
     return (
         <div className="size-full">
             <iframe
+                className="fixed inset-x-0 size-full"
                 src={`https://www.gov.kr/yearend_main.html`}
                 //         //src={`https://www.youtube.com/embed/${videoId}`}
                 //         //src={`https://shopping.naver.com/`}
@@ -9,6 +10,7 @@ export default function WebViewPage() {
                 //         src="https://www.google.com/webhp?igu=1"
                 height="100%"
                 allowFullScreen
+                loading="lazy"
             />
         </div>
     )

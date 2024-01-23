@@ -1,9 +1,11 @@
+import { SvgVoice } from '@/lib/icons'
+
 export default function WebViewPage() {
     return (
-        <div className="size-full">
+        <div className="relative size-full">
             <iframe
                 className="fixed inset-x-0 size-full"
-                src={`https://www.gov.kr/yearend_main.html`}
+                src={`https://www.gov.kr/portal/main/nologin`}
                 //         //src={`https://www.youtube.com/embed/${videoId}`}
                 //         //src={`https://shopping.naver.com/`}
                 //         //쿠팡 & 국민은행 & 정부24 & 정부정책 &
@@ -12,6 +14,9 @@ export default function WebViewPage() {
                 allowFullScreen
                 loading="lazy"
             />
+            <div className="absolute bottom-0">
+                <SvgVoice />
+            </div>
         </div>
     )
 }

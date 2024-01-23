@@ -4,7 +4,7 @@ export default function WebViewPage() {
     return (
         <div className="relative size-full">
             <iframe
-                className="fixed inset-x-0 size-full"
+                className="fixed inset-x-0 size-full  bg-white"
                 src={`https://www.gov.kr/portal/main/nologin`}
                 //         //src={`https://www.youtube.com/embed/${videoId}`}
                 //         //src={`https://shopping.naver.com/`}

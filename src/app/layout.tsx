@@ -45,7 +45,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return (
         <html lang="kr" className={`${bylander.variable} ${pretendard.variable}`}>
             <body className="h-screen max-h-screen min-h-screen bg-background font-kor text-theme-font">
-                <SessionProviderContainer session={session}>{children}</SessionProviderContainer>
+                <SessionProviderContainer session={session}>
+                    <main className="mx-auto size-full px-6">{children}</main>
+                </SessionProviderContainer>
             </body>
         </html>
     )

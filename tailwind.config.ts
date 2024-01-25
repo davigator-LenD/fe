@@ -32,6 +32,7 @@ const config: Config = {
                     box: '#262626',
                     toggleBG: '#171413',
                     textfieldBOX: '#E8E8E7',
+                    websitelist: '#888888',
                 },
             },
         },

@@ -1,11 +1,84 @@
 'use client'
-import { useState } from 'react'
+import { PropsWithChildren, useRef, useState } from 'react'
+import { ReactNode } from 'react'
 import { Text } from '@/lib/common'
 import { SvgBack, SvgWebList } from '@/lib/icons'
 import { SvgWebListVoice } from '@/lib/icons/weblist_voice'
 
+interface SwipeToDeleteProps {
+    rows: Array<{ id: number; name: string; url: string }>
+    onDelete: (id: number) => void
+}
+const Item = ({ children }: { children: ReactNode }) => {
+    const ref = useRef<HTMLDivElement>(null)
+    let downX: number
+
+    const onPointerMove = (e: MouseEvent) => {
+        const newX = e.clientX
+        if (newX - downX < -30 && ref.current) {
+            ref.current.style.transform = 'translateX(-55px)'
+            setTimeout(() => {
+                if (ref.current) {
+                    ref.current.style.transform = 'translateX(0px)'
+                }
+            }, 4000)
+        } else {
+            if (ref.current) {
+                ref.current.style.transform = 'translateX(0px)'
+            }
+        }
+    }
+    const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        downX = e.clientX
+        if (ref.current) {
+            ref.current.addEventListener('pointermove', onPointerMove)
+        }
+    }
+    const onPointerUp = () => {
+        if (ref.current) {
+            ref.current.removeEventListener('pointermove', onPointerMove)
+        }
+    }
+
+    return (
+        <div
+            className="ml-[3px] mr-0 w-full flex-1 shrink-0 bg-gray-500 "
+            style={{ transition: 'transform 800ms' }}
+            onPointerDown={onPointerDown}
+            ref={ref}
+            onPointerUp={onPointerUp}
+        >
+            {children}
+        </div>
+    )
+}
+const SwipeToDelete = ({ rows, onDelete }: PropsWithChildren<SwipeToDeleteProps>) => {
+    return (
+        <div className="w-full overflow-hidden border-[3px] border-solid">
+            {rows.map((row) => (
+                <Item key={row.id}>
+                    <div>{row.name}</div>
+
+                    <button
+                        className="min-w-[55px] cursor-pointer border-none bg-red-800 text-left"
+                        onClick={() => onDelete(row.id)}
+                    >
+                        delete
+                    </button>
+                </Item>
+            ))}
+        </div>
+    )
+}
 export default function WebListPage() {
     const [question, setQuestion] = useState('')
+    const [list, setList] = useState([
+        { id: 0, name: '정부24', url: 'www.gov.kr' },
+        { id: 1, name: '정부24ㄴㄹ', url: 'www.gov.kr' },
+    ])
+    const onDelete = (id: number) => {
+        setList((prev) => prev.filter((row) => row.id !== id))
+    }
     return (
         <div className="flex size-full flex-col items-start justify-start">
             <div className="mt-8 flex w-full flex-row items-center justify-between">
@@ -29,6 +102,16 @@ export default function WebListPage() {
 
                     <div className={`  ml-[-32px] flex items-center justify-end`}>
                         <SvgWebList />
+                    </div>
+                </div>
+                <div className="flex flex-col">
+                    <div className="flex flex-col">
+                        <div className="mb-4 mt-8 text-xl font-[700] text-primary-websitelist">내 웹사이트</div>
+                        <SwipeToDelete rows={list} onDelete={onDelete} />
+                    </div>
+
+                    <div className="flex flex-col">
+                        <div className="mb-4 mt-8 text-xl font-[700] text-primary-websitelist">추천 웹사이트</div>
                     </div>
                 </div>
             </div>

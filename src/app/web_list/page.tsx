@@ -2,7 +2,8 @@
 import { PropsWithChildren, useRef, useState } from 'react'
 import { ReactNode } from 'react'
 import { Text } from '@/lib/common'
-import { SvgBack, SvgWebList } from '@/lib/icons'
+import { SvgBack, SvgVoice, SvgWebList } from '@/lib/icons'
+import { SvgEclipse } from '@/lib/icons/eclipse'
 import { SvgWebListVoice } from '@/lib/icons/weblist_voice'
 
 interface SwipeToDeleteProps {
@@ -57,7 +58,16 @@ const SwipeToDelete = ({ rows, onDelete }: PropsWithChildren<SwipeToDeleteProps>
         <div className="w-full overflow-hidden border-[3px] border-solid">
             {rows.map((row) => (
                 <Item key={row.id}>
-                    <div className="shrink-0 grow basis-full">{row.name}</div>
+                    <div className="flex shrink-0 grow basis-full flex-row py-4">
+                        <div>
+                            <SvgEclipse />
+                        </div>
+
+                        <div className="ml-4 flex flex-col items-start justify-center">
+                            <div className="font-[600]">{row.name}</div>
+                            <div>{row.url}</div>
+                        </div>
+                    </div>
 
                     <button
                         className="min-w-[55px] cursor-pointer border-none bg-red-800 text-left"
@@ -73,8 +83,8 @@ const SwipeToDelete = ({ rows, onDelete }: PropsWithChildren<SwipeToDeleteProps>
 export default function WebListPage() {
     const [question, setQuestion] = useState('')
     const [list, setList] = useState([
-        { id: 0, name: '정부24', url: 'www.gov.kr' },
-        { id: 1, name: '정부24ㄴㄹ', url: 'www.gov.kr' },
+        { id: 0, name: '정부24', url: 'https://www.gov.kr/yearend_main.html' },
+        { id: 1, name: '네이버', url: 'https://www.naver.com' },
     ])
     const onDelete = (id: number) => {
         setList((prev) => prev.filter((row) => row.id !== id))

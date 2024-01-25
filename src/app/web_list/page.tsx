@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { Text } from '@/lib/common'
 import { SvgBack, SvgVoice, SvgWebList } from '@/lib/icons'
 import { SvgEclipse } from '@/lib/icons/eclipse'
+import { SvgStar } from '@/lib/icons/star'
 import { SvgWebListVoice } from '@/lib/icons/weblist_voice'
 
 interface SwipeToDeleteProps {
@@ -43,7 +44,7 @@ const Item = ({ children }: { children: ReactNode }) => {
 
     return (
         <div
-            className="ml-[3px] mr-0 flex w-full bg-gray-500 "
+            className="ml-[3px] flex w-full"
             style={{ transition: 'transform 800ms' }}
             onPointerDown={onPointerDown}
             ref={ref}
@@ -55,22 +56,28 @@ const Item = ({ children }: { children: ReactNode }) => {
 }
 const SwipeToDelete = ({ rows, onDelete }: PropsWithChildren<SwipeToDeleteProps>) => {
     return (
-        <div className="w-full overflow-hidden border-[3px] border-solid">
+        <div className="w-full overflow-hidden border-solid">
             {rows.map((row) => (
                 <Item key={row.id}>
-                    <div className="flex shrink-0 grow basis-full flex-row py-4">
+                    <div className=" flex shrink-0 grow basis-full flex-row py-4">
                         <div>
                             <SvgEclipse />
                         </div>
 
-                        <div className="ml-4 flex flex-col items-start justify-center">
-                            <div className="font-[600]">{row.name}</div>
-                            <div>{row.url}</div>
+                        <div className="flex w-full items-center justify-between">
+                            <div className="ml-4 flex flex-col items-start justify-center">
+                                <div className=" font-[600]">{row.name}</div>
+                                <div className="w-full max-w-[180px] truncate">{row.url}</div>
+                            </div>
+
+                            <div className="mr-[2px]">
+                                <SvgStar />
+                            </div>
                         </div>
                     </div>
 
                     <button
-                        className="min-w-[55px] cursor-pointer border-none bg-red-800 text-left"
+                        className="min-w-[55px] cursor-pointer border-none bg-primary-logo text-left"
                         onClick={() => onDelete(row.id)}
                     >
                         delete

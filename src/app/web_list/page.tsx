@@ -11,6 +11,9 @@ interface SwipeToDeleteProps {
     rows: Array<{ id: number; name: string; url: string }>
     onDelete: (id: number) => void
 }
+interface RecommendListProps {
+    rows: Array<{ id: number; name: string; url: string }>
+}
 const Item = ({ children }: { children: ReactNode }) => {
     const ref = useRef<HTMLDivElement>(null)
     let downX: number
@@ -18,7 +21,7 @@ const Item = ({ children }: { children: ReactNode }) => {
     const onPointerMove = (e: MouseEvent) => {
         const newX = e.clientX
         if (newX - downX < -30 && ref.current) {
-            ref.current.style.transform = 'translateX(-55px)'
+            ref.current.style.transform = 'translateX(-120px)'
             setTimeout(() => {
                 if (ref.current) {
                     ref.current.style.transform = 'translateX(0px)'
@@ -70,19 +73,43 @@ const SwipeToDelete = ({ rows, onDelete }: PropsWithChildren<SwipeToDeleteProps>
                                 <div className="w-full max-w-[180px] truncate">{row.url}</div>
                             </div>
 
-                            <div className="mr-[2px]">
+                            <div className="mr-4 ">
                                 <SvgStar />
                             </div>
                         </div>
                     </div>
 
                     <button
-                        className="min-w-[55px] cursor-pointer border-none bg-primary-logo text-left"
+                        className=" min-w-[120px] cursor-pointer border-none bg-primary-logo text-center text-2xl  font-[600] text-background"
                         onClick={() => onDelete(row.id)}
                     >
-                        delete
+                        삭제
                     </button>
                 </Item>
+            ))}
+        </div>
+    )
+}
+const RecommendList = ({ rows }: PropsWithChildren<RecommendListProps>) => {
+    return (
+        <div className="w-full overflow-hidden border-solid">
+            {rows.map((row) => (
+                <div key={row.id} className="flex py-4">
+                    <div>
+                        <SvgEclipse />
+                    </div>
+
+                    <div className="flex w-full items-center justify-between">
+                        <div className="ml-4 flex flex-col items-start justify-center">
+                            <div className=" font-[600]">{row.name}</div>
+                            <div className="w-full">{row.url}</div>
+                        </div>
+
+                        <div className="mr-[2px]">
+                            <SvgStar />
+                        </div>
+                    </div>
+                </div>
             ))}
         </div>
     )
@@ -93,6 +120,10 @@ export default function WebListPage() {
         { id: 0, name: '정부24', url: 'https://www.gov.kr/yearend_main.html' },
         { id: 1, name: '네이버', url: 'https://www.naver.com' },
     ])
+    const recommendlist = [
+        { id: 0, name: '정부24', url: 'https://www.gov.kr/yearend_main.html' },
+        { id: 1, name: '네이버', url: 'https://www.naver.com' },
+    ]
     const onDelete = (id: number) => {
         setList((prev) => prev.filter((row) => row.id !== id))
     }
@@ -129,6 +160,7 @@ export default function WebListPage() {
 
                     <div className="flex flex-col">
                         <div className="mb-4 mt-8 text-xl font-[700] text-primary-websitelist">추천 웹사이트</div>
+                        <RecommendList rows={recommendlist} />
                     </div>
                 </div>
             </div>

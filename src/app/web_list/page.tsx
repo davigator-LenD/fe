@@ -42,7 +42,7 @@ const Item = ({ children }: { children: ReactNode }) => {
 
     return (
         <div
-            className="ml-[3px] mr-0 w-full flex-1 shrink-0 bg-gray-500 "
+            className="ml-[3px] mr-0 flex w-full bg-gray-500 "
             style={{ transition: 'transform 800ms' }}
             onPointerDown={onPointerDown}
             ref={ref}
@@ -57,7 +57,7 @@ const SwipeToDelete = ({ rows, onDelete }: PropsWithChildren<SwipeToDeleteProps>
         <div className="w-full overflow-hidden border-[3px] border-solid">
             {rows.map((row) => (
                 <Item key={row.id}>
-                    <div>{row.name}</div>
+                    <div className="shrink-0 grow basis-full">{row.name}</div>
 
                     <button
                         className="min-w-[55px] cursor-pointer border-none bg-red-800 text-left"

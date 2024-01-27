@@ -4,6 +4,7 @@ import { Divider, type DividerProps } from './divider'
 interface GridProps extends DividerProps {
     count: number
     gap?: Tw['gap']
+    style?: Tw
 }
 const grid = tw.style({
     display: 'flex',
@@ -15,11 +16,12 @@ const grid = tw.style({
     height: 'h-fit',
 })
 
-export const Grid = ({ count, gap = 'gap-5', ...dividerStyle }: GridProps) => {
+export const Grid = ({ count, gap = 'gap-5', style, ...dividerStyle }: GridProps) => {
     return (
         <div
             className={
                 grid.compose({
+                    ...style,
                     gap,
                 }).class
             }

@@ -1,20 +1,15 @@
-/* eslint-disable no-console */
 import { t } from '@metal-box/type'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Logger } from '@/helpers/logger'
 import { v } from '@/helpers/validator'
+import { mergeFrequencyStep } from './utils'
 
 const lg = new Logger({ name: 'AudioVisualizer' })
 
 const decibel = t.number.validate(v.min(-100), v.max(0))
 const smoothing = t.number.validate(v.min(0), v.max(1))
 
-interface CreateAudioAnalyzerOption {
-    /**
-     * @description media stream, core of audio analyzer
-     * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaStream MediaStream}
-     */
-    mediaStream: MediaStream
+interface AudioAnalyzerOption {
     /**
      * @description fft resolution, fourier transform step resolution
      */
@@ -31,6 +26,14 @@ interface CreateAudioAnalyzerOption {
      * @description amplitude smoothing level, if higher, the amplitude will be more soft and stable
      */
     smoothingTimeConstant?: number
+}
+
+interface CreateAudioAnalyzerOption extends AudioAnalyzerOption {
+    /**
+     * @description media stream, core of audio analyzer
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaStream MediaStream}
+     */
+    mediaStream: MediaStream
 }
 interface AudioAnalyzer {
     /**
@@ -51,14 +54,14 @@ interface AudioAnalyzer {
      */
     connect: () => void
 }
-const createAudioAnalyzer = ({
+const createAudioRecordAnalyzer = ({
     mediaStream,
     fftResolution,
     maxDecibels,
     minDecibels,
     smoothingTimeConstant,
 }: CreateAudioAnalyzerOption): AudioAnalyzer => {
-    const audioContext = new window.AudioContext()
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)()
     const analyzer = audioContext.createAnalyser()
 
     // set analyzer options
@@ -68,7 +71,6 @@ const createAudioAnalyzer = ({
     analyzer.smoothingTimeConstant = smoothing.parse(smoothingTimeConstant ?? 0.85)
 
     const source: MediaStreamAudioSourceNode = audioContext.createMediaStreamSource(mediaStream)
-
     const connect = () => {
         source.connect(analyzer)
     }
@@ -79,50 +81,12 @@ const createAudioAnalyzer = ({
     }
 
     const frequencyStep: Uint8Array = new Uint8Array(analyzer.frequencyBinCount)
-
     return {
         analyzer,
         frequencyStep,
         disconnect,
         connect,
     }
-}
-
-/**
- * @description merge frequency step to active bar number
- * @param frequencyStep merged frequency step
- * @param activeBarNumber compress frequency step to active bar number
- * @example
- * ```md
- *  Input: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100], Merge to 5
- *  ---
-    Process:
-    -> First pair: (10 + 20) / 2 = 15
-    -> Second pair: (30 + 40) / 2 = 35
-    -> Third pair: (50 + 60) / 2 = 55
-    -> Fourth pair: (70 + 80) / 2 = 75
-    -> Fifth pair: (90 + 100) / 2 = 95
-    ---
-    Output: [15, 35, 55, 75, 95]
- * ```
- */
-const mergeFrequencyStep = (frequencyStep: Uint8Array, activeBarNumber: number): Array<number> => {
-    const mergedFrequencyStep: Array<number> = []
-    const step = Math.floor(frequencyStep.length / activeBarNumber)
-
-    for (let i = 0; i < activeBarNumber; i++) {
-        let sum = 0
-        const startIndex = i * step
-        const endIndex = startIndex + step
-
-        for (let j = startIndex; j < endIndex; j++) {
-            sum += frequencyStep[j]!
-        }
-
-        mergedFrequencyStep.push(sum / step)
-    }
-
-    return mergedFrequencyStep
 }
 
 interface UseMediaStreamProps {
@@ -133,19 +97,28 @@ interface UseMediaStreamProps {
     constraints: Omit<MediaStreamConstraints, 'video'>
 }
 const useMediaStream = ({ constraints }: UseMediaStreamProps) => {
-    const [mediaStream, setMediaStream] = useState<MediaStream | null>(null)
-    const [isMediaStreamReady, setIsRecordReady] = useState<boolean>(false)
+    const mediaStream = useRef<MediaStream | null>(null)
+    const [isMediaStreamReady, setIsMediaStreamReady] = useState<boolean>(false)
 
     useEffect(() => {
         const setupMediaStream = async () => {
             const stream: MediaStream = await navigator.mediaDevices.getUserMedia(constraints)
-            setMediaStream(stream)
+            mediaStream.current = stream
         }
 
         setupMediaStream().then(() => {
-            setIsRecordReady(true)
+            setIsMediaStreamReady(true)
         })
-    }, [constraints])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        return () => {
+            mediaStream.current?.getTracks().forEach((track) => {
+                track.stop()
+            })
+        }
+    }, [])
 
     return {
         mediaStream,
@@ -158,9 +131,9 @@ interface UseMediaRecorderProps extends UseMediaStreamProps {
      * @description handle recorded audio blob when ready
      * @param audioBlob recorded audioBlob, `Blob`
      */
-    whenAudioBlobReady: (audioBlob: Blob) => void
+    whenAudioBlobReady: (audioBlob: Blob) => Promise<void>
 }
-export const useMediaRecorder = ({ constraints, whenAudioBlobReady: whenMediaChunksReady }: UseMediaRecorderProps) => {
+export const useMediaRecorder = ({ constraints, whenAudioBlobReady }: UseMediaRecorderProps) => {
     const { isMediaStreamReady, mediaStream } = useMediaStream({ constraints })
 
     const mediaRecorder = useRef<MediaRecorder | null>(null)
@@ -169,14 +142,14 @@ export const useMediaRecorder = ({ constraints, whenAudioBlobReady: whenMediaChu
     const [isRecording, setIsRecording] = useState<boolean>(false)
 
     useEffect(() => {
-        if (isMediaStreamReady && mediaStream) {
-            const recorder: MediaRecorder = new MediaRecorder(mediaStream)
+        if (isMediaStreamReady && mediaStream.current) {
+            const recorder: MediaRecorder = new MediaRecorder(mediaStream.current)
             mediaRecorder.current = recorder
-            mediaRecorder.current.ondataavailable = (event) => {
+            mediaRecorder.current.ondataavailable = async (event) => {
                 if (event.data.size > 0) {
                     mediaChunks.current.push(event.data)
                     const combinedChunks = new Blob(mediaChunks.current, { type: 'audio/webm' })
-                    whenMediaChunksReady(combinedChunks)
+                    await whenAudioBlobReady(combinedChunks)
                 }
             }
             lg.success('media recorder created')
@@ -226,7 +199,7 @@ export interface UseAudioVisualizerProps {
     isMediaStreamReady?: boolean
     /**
      * @description audio analyzer options
-     * @see {@link createAudioAnalyzer}'s `CreateAudioAnalyzerOption`
+     * @see {@link createAudioRecordAnalyzer}'s `CreateAudioAnalyzerOption`
      */
     analyzerOptions?: Omit<CreateAudioAnalyzerOption, 'mediaStream'>
 }
@@ -235,10 +208,6 @@ export interface AudioVisualizerHook {
      * @description audio analyzer ready state
      */
     isAudioEngineReady: boolean
-    /**
-     * @description connect audio analyzer
-     */
-    connect: () => void
     /**
      * @description disconnect audio analyzer
      */
@@ -292,14 +261,14 @@ export const useAudioVisualizer = ({
         if (!isMediaStreamReady) return
         if (!mediaStream) return
 
-        const engine = createAudioAnalyzer({
+        const engine = createAudioRecordAnalyzer({
             fftResolution: 32,
             ...analyzerOptions,
             mediaStream,
         })
         audioAnalyzer.current = engine
         setIsAudioEngineReady(true)
-        lg.success('audio engine created')
+        lg.success('audio visualizer engine created')
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMediaStreamReady])
 

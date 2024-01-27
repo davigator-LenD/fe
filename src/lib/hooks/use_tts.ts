@@ -11,12 +11,7 @@ const fetcher = new Fetcher({
     },
 })
 
-const playAudio = (audioUrl: AudioUrl) => {
-    const audio = new Audio(audioUrl)
-    audio.play()
-}
-
-export type AudioUrl = string
+type AudioUrl = string
 /**
  * @description useTTS
  * @example
@@ -44,12 +39,12 @@ export type AudioUrl = string
  * ```
  */
 export const useTTS = () => {
-    const [audioUrlList, setAudioUrlList] = useState<Map<string, AudioUrl>>(new Map())
+    const [audioUrlList, setAudioUrlList] = useState<Map<string, { url: AudioUrl; blob: Blob }>>(new Map())
 
-    const fetchTTSAudio = async (text: string): Promise<Blob | null> => {
+    const fetchTTSAudio = async (text: string): Promise<AudioUrl> => {
         if (audioUrlList.has(text)) {
-            playAudio(audioUrlList.get(text)!)
-            return null
+            const { url } = audioUrlList.get(text)!
+            return url
         }
 
         const ttsResponse = await fetcher.post('tts', {
@@ -66,13 +61,14 @@ export const useTTS = () => {
         const audioUrl: AudioUrl = URL.createObjectURL(blob)
 
         setAudioUrlList((prev) => {
-            prev.set(text, audioUrl)
+            prev.set(text, {
+                blob,
+                url: audioUrl,
+            })
             return prev
         })
 
-        playAudio(audioUrl)
-
-        return blob
+        return audioUrl
     }
 
     return {
@@ -84,6 +80,6 @@ export const useTTS = () => {
         /**
          * @description store of audio cache url
          */
-        store: audioUrlList as ReadonlyMap<string, AudioUrl>,
+        store: audioUrlList as ReadonlyMap<string, { url: AudioUrl; blob: Blob }>,
     }
 }

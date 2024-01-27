@@ -13,7 +13,13 @@ const fetcher = new Fetcher({
 
 export const useSTT = () => {
     const getSTT = useCallback(
-        async ({ audioBlob, whenDataReady }: { audioBlob: Blob; whenDataReady: (sttText: string) => void }) => {
+        async ({
+            audioBlob,
+            whenDataReady,
+        }: {
+            audioBlob: Blob
+            whenDataReady: (sttText: string) => Promise<void>
+        }) => {
             if (!audioBlob) return
             const reader = new FileReader()
             reader.readAsDataURL(audioBlob)
@@ -26,7 +32,7 @@ export const useSTT = () => {
                         audio: base64Audio,
                     },
                 })
-                whenDataReady(sttText.response)
+                await whenDataReady(sttText.response)
             }
         },
         []

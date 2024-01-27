@@ -3,7 +3,7 @@ import { SVGProps } from 'react'
 export const SvgClose = (props: SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" {...props}>
         <path
-            stroke="#060707"
+            stroke={props.stroke ?? '#060707'}
             strokeLinecap="round"
             strokeMiterlimit="10"
             strokeWidth="2"

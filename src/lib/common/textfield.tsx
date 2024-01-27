@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { AssistantModule } from '@/app/_components/assistant_module'
 import { SvgSmallSend } from '@/lib/icons'
 import { SvgClose } from '../icons/close'
 const useKeyboardHeight = () => {
@@ -51,69 +50,69 @@ export const WebTextField = () => {
         </div>
     )
 }
-interface ModeProps {
-    mode: boolean
+interface QuestionTextFieldProps {
+    onClose: () => void
+    onSubmit: (question: string) => void
 }
-export const QuestionTextField = () => {
+export const QuestionTextField = ({ onClose, onSubmit }: QuestionTextFieldProps) => {
     const [question, setQuestion] = useState('')
-    const inputHeight = useKeyboardHeight()
-    const [isKeyboardMode, setIsKeyboardMode] = useState<boolean>(true)
+    const isQuestionEmpty: boolean = question === ''
 
-    const handleSubmit = () => {
-        //alert(`website: ${website}`)
+    const inputHeight = useKeyboardHeight()
+
+    const resetQuestion = () => {
         setQuestion('')
     }
 
     return (
-        <div>
-            {isKeyboardMode ? (
-                <div className="flex h-screen w-full items-center justify-center p-8">
-                    <div
-                        className={`fixed bottom-0 flex w-full flex-col items-center justify-evenly bg-primary-textfieldBOX  p-[10px]`}
-                        style={{ height: `${inputHeight + 60}px` }}
+        <div className="flex h-screen w-full items-center justify-center">
+            <div
+                className={`fixed bottom-0 flex w-full flex-col items-center justify-evenly bg-primary-textfieldBOX/80 px-4 backdrop-blur-3xl`}
+                style={{ height: `${inputHeight + 60}px` }}
+            >
+                <div className="relative flex w-full flex-row items-center justify-center">
+                    <span className={`h-[3.5px] w-[110px] select-none rounded-3xl bg-background`} />
+                    <button
+                        type="button"
+                        aria-label="키보드 닫기"
+                        className="absolute -top-1 right-2 z-10"
+                        onClick={onClose}
                     >
-                        <div className="flex w-full flex-row items-center justify-between">
-                            <div></div>
-                            <div
-                                className={` ${question === '' ? 'mb-[4px]' : ''}  h-[3px] w-1/5 rounded-3xl bg-background`}
-                            ></div>
-                            <div
-                                className="mt-[-16px]"
-                                onClick={() => {
-                                    setIsKeyboardMode(!isKeyboardMode)
-                                }}
-                            >
-                                <SvgClose />
-                            </div>
-                        </div>
-                        <div className="flex w-full items-center justify-center">
-                            <form className={`${question === '' ? 'mb-[-12px]' : 'mb-[-12px]'} flex w-full `}>
-                                <input
-                                    className={`flex max-h-[80px] w-full items-center rounded-3xl border-2 border-primary-box bg-background p-3 px-6 caret-primary-logo shadow-inner ${question === '' ? 'placeholder:text-primary-box' : ' placeholder:text-theme-font'}`}
-                                    id="textfield1"
-                                    type="text"
-                                    value={question}
-                                    onChange={(e) => setQuestion(e.target.value)}
-                                    placeholder="웹 사이트 이름"
-                                />
-                            </form>
-
-                            {question === '' ? (
-                                <div></div>
-                            ) : (
-                                <div
-                                    className={`${question === '' ? '' : 'mb-[-12px]'} z-10 ml-[-48px] flex items-center justify-end`}
-                                    onClick={handleSubmit}
-                                >
-                                    <SvgSmallSend />
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                        <SvgClose />
+                    </button>
                 </div>
-            ) : (
-                <AssistantModule />
-            )}
+
+                <div className="flex h-fit w-full items-center justify-center">
+                    <form
+                        className="h-fit w-full"
+                        onSubmit={(e) => {
+                            e.preventDefault()
+                            if (isQuestionEmpty) return
+                            onSubmit(question)
+                            resetQuestion()
+                        }}
+                    >
+                        <input
+                            className={`flex max-h-[80px] w-full items-center rounded-3xl border-2 border-primary-box bg-background p-3 px-6 caret-primary-logo shadow-inner outline-none ${question === '' ? 'placeholder:text-stone-600' : ' placeholder:text-theme-font'}`}
+                            id="textfield1"
+                            type="text"
+                            value={question}
+                            placeholder="이동하고 싶은 웹사이트를 적어주세요"
+                            onChange={(e) => setQuestion(e.target.value)}
+                        />
+                    </form>
+
+                    <button
+                        type="button"
+                        aria-label="ai에게 전송"
+                        disabled={isQuestionEmpty}
+                        className={`${isQuestionEmpty ? 'opacity-0 scale-75' : 'opacity-100 scale-100'} z-10 ml-[-50px] flex items-center justify-end p-1 transition-all`}
+                        onClick={resetQuestion}
+                    >
+                        <SvgSmallSend />
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }
